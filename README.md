@@ -36,6 +36,9 @@ $ docker volume create --driver gcstorage --name datastore
 datastore
 ````
 The GCS Bucket name is defined by: **gcsProjectID_volumeName**
+<br/><br/>
+![gcs-bucket-0](https://github.com/craimbert/my-gcs-vol/blob/master/screenshots/gcs-bucket-0.png)
+<br/><br/>
 - List volumes
 ````
 $ docker volume ls
@@ -46,6 +49,21 @@ gcstorage           datastore
 ````
 $ docker run -it --rm -v datastore:/tmp alpine sh
 / # date > /tmp/date
+````
+The container dir `/tmp` is mounted on the GC Storage bucket defined by the volume `datastore` (through the host mountpoint `/var/lib/docker-volumes/gcstorage/datastore/_data`), the filesystem IO between host mountpoint and GCS bucket being handled by gcsfuse
+<br/><br/>
+![gcs-bucket-1](https://github.com/craimbert/my-gcs-vol/blob/master/screenshots/gcs-bucket-1.png)
+<br/><br/>
+Upload manually through Cloud Storage web portal a new `foo` file into the bucket:
+<br/><br/>
+![gcs-bucket-2](https://github.com/craimbert/my-gcs-vol/blob/master/screenshots/gcs-bucket-2.png)
+<br/><br/>
+Inside the container, the new file `foo` appears:
+````
+/tmp # ls -l /tmp/
+total 1
+-rw-r--r--    1 root     root            29 Jul  7 02:17 date
+-rw-r--r--    1 root     root             4 Jul  7 03:50 foo
 ````
 ## Useful Links
 ### Google Cloud Storage - FUSE
