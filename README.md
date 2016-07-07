@@ -1,4 +1,4 @@
-docker-volume-gcp-storage
+docker-volume-gc-storage
 ## Overview
 Docker Volume Plugin: Google Cloud Storage - Buckets
 
@@ -23,7 +23,7 @@ $ service docker stop
 Section `To generate a private key in JSON or PKCS12 format`:<br/> https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
 ### Start the Volume Driver
 ````
-$ docker-volume-gcp-storage -gcp-key-json gcp-srv-account-key.json
+$ docker-volume-gc-storage -gcp-key-json gcp-srv-account-key.json
 ````
 ### Start Docker engine
 ````
