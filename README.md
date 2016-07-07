@@ -1,30 +1,36 @@
-# Google Cloud Storage
-###Generate on GCP a Service Account key as JSON file
-Section `generate a private key in JSON `: https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
 
+## Overview
+Docker Volume Plugin: Google Cloud Storage - Buckets
+### Google Cloud Storage
+#### Google Cloud Storage - Buckets
+https://console.cloud.google.com/storage
 
-# Installation
-##Install Google Cloud Platform `gcsfuse`
+####Generate on GCP a Service Account key in JSON format
+Section `To generate a private key in JSON or PKCS12 format`:<br/> https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
+
+## Installation
+### Dependency: Install Google Cloud Platform `gcsfuse`
 https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
-##Install the Volume Driver
+
+### Install the Volume Driver
 ````
 $ go get github.com/craimbert/docker-volume-gc-storage
 $ cd $GOPATH/src/github.com/craimbert/docker-volume-gc-storage && go get -d -v
 $ go install craimbert/docker-volume-gc-storage
 ````
-##Stop Docker engine
+### Stop Docker engine
 ````
 $ service docker stop
 ````
-##Start the Volume Driver
+### Start the Volume Driver
 ````
 $ docker-volume-gcp-storage -gcp-key-json gcp-srv-account-key.json
 ````
-##Stop Docker engine
+### Start Docker engine
 ````
 $ service docker start
 ````
-#Using the Volume Driver
+## Usage
 ````
 $ docker volume create --driver gcstorage --name datastore
 datastore
@@ -36,23 +42,19 @@ gcstorage           datastore
 $ docker run -it --rm -v datastore:/tmp alpine sh
 / # date > /tmp/date
 ````
-# Useful Links
-###Google Cloud Storage - Buckets
-https://console.cloud.google.com/storage
-
-###Google Cloud Storage - FUSE
+## Useful Links
+### Google Cloud Storage - FUSE
 * https://cloud.google.com/storage/docs/gcs-fuse
 * https://github.com/GoogleCloudPlatform/gcsfuse
 
-
-###Google GO API
+### Google GO API
 * https://godoc.org/google.golang.org/api/storage/v1
 * https://godoc.org/google.golang.org/cloud/storage
 
-###Docker Volume Driver interface
+### Docker Volume Driver interface
 https://github.com/docker/go-plugins-helpers/blob/master/volume
 
-#Tested environment: Go & Docker versions
+##Tested environment: Go & Docker versions
 ```
 $ go version
 go version go1.6.2 linux/amd64
@@ -73,10 +75,10 @@ Server:
  Built:        Wed Jun  1 21:23:39 2016
  OS/Arch:      linux/amd64
 ````
-# Common Issues
+## Common Issues
 !! NTP !!
 
-#TODO
+## TODO
 On Docker for Mac: Docker engine doesn't seem to register the Volume Driver (even after engine restart):
 ````
 $ docker volume create --driver gcstorage --name datastore
