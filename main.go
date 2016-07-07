@@ -16,11 +16,7 @@ const (
 	driverTCPPort = "localhost:8080"
 )
 
-var (
-	defaultPath       string
-	serviceKeyPath    *string
-	gcpServiceKeyPath string
-)
+var serviceKeyPath = flag.String("gcp-key-json", "", "Google Cloud Platform Service Account Key as JSON")
 
 func main() {
 	// define CLI & get args
@@ -28,14 +24,14 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n", os.Args[0])
 		flag.PrintDefaults()
 	}
-	serviceKeyPath = flag.String("gcp-key-json", "", "Google Cloud Platform Service Account Key as JSON")
 	flag.Parse()
 	if len(*serviceKeyPath) == 0 {
 		Usage()
 		os.Exit(1)
 	}
+
 	// define volume driver
-	defaultPath = filepath.Join(volume.DefaultDockerRootDirectory, driverID)
+	defaultPath := filepath.Join(volume.DefaultDockerRootDirectory, driverID)
 	gcpServiceKeyAbsPath, err := filepath.Abs(*serviceKeyPath)
 	if err != nil {
 		log.Fatal(err)
