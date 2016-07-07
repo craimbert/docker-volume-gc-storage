@@ -1,3 +1,5 @@
+# Installation
+## Prerequisite: tested environment
 ```
 $ go version
 go version go1.6.2 linux/amd64
@@ -18,22 +20,28 @@ Server:
  Built:        Wed Jun  1 21:23:39 2016
  OS/Arch:      linux/amd64
 ````
-
-###Install Google Cloud Platform `gcsfuse`
+##Install Google Cloud Platform `gcsfuse`
 https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
-
-
+##Install the Volume Driver
+````
 $ go get github.com/craimbert/docker-volume-gc-storage
 $ cd $GOPATH/src/github.com/craimbert/docker-volume-gc-storage && go get -d -v
 $ go install craimbert/docker-volume-gc-storage
-
-Stopping Docker
+````
+##Stop Docker engine
+````
 $ service docker stop
-
-Starting the Volume Driver
+````
+##Start the Volume Driver
+````
 $ docker-volume-gcp-storage -gcp-key-json gcp-srv-account-key.json
-
-### Using the Volume Driver
+````
+##Stop Docker engine
+````
+$ service docker start
+````
+#Using the Volume Driver
+````
 $ docker volume create --driver gcstorage --name datastore
 datastore
 
@@ -43,7 +51,7 @@ gcstorage           datastore
 
 $ docker run -it --rm -v datastore:/tmp alpine sh
 / # date > /tmp/date
-
+````
 # Useful Links
 ###Google Cloud Storage - Buckets Homepage
 https://console.cloud.google.com/storage
