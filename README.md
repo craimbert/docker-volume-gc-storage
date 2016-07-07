@@ -53,19 +53,19 @@ $ docker run -it --rm -v datastore:/tmp alpine sh
 / # date > /tmp/date
 ````
 # Useful Links
-###Google Cloud Storage - Buckets Homepage
+###Google Cloud Storage - Buckets
 https://console.cloud.google.com/storage
 
 ###Google Cloud Storage - FUSE
-https://cloud.google.com/storage/docs/gcs-fuse
-https://github.com/GoogleCloudPlatform/gcsfuse
+* https://cloud.google.com/storage/docs/gcs-fuse
+* https://github.com/GoogleCloudPlatform/gcsfuse
 
 ###Generate on GCP a Service Account key as JSON file
 https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
 
 ###Google GO API
-https://godoc.org/google.golang.org/api/storage/v1
-https://godoc.org/google.golang.org/cloud/storage
+* https://godoc.org/google.golang.org/api/storage/v1
+* https://godoc.org/google.golang.org/cloud/storage
 
 ###Docker Volume Driver interface
 https://github.com/docker/go-plugins-helpers/blob/master/volume
