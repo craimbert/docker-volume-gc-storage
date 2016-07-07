@@ -1,4 +1,4 @@
-
+docker-volume-gcp-storage
 ## Overview
 Docker Volume Plugin: Google Cloud Storage - Buckets
 
@@ -30,14 +30,20 @@ $ docker-volume-gcp-storage -gcp-key-json gcp-srv-account-key.json
 $ service docker start
 ````
 ## Usage
+- Create a volume
 ````
 $ docker volume create --driver gcstorage --name datastore
 datastore
-
+````
+The GCS Bucket name is defined by: **gcsProjectID_volumeName**
+- List volumes
+````
 $ docker volume ls
 DRIVER              VOLUME NAME
 gcstorage           datastore
-
+````
+- Mount the volume on a container
+````
 $ docker run -it --rm -v datastore:/tmp alpine sh
 / # date > /tmp/date
 ````
