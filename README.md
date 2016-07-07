@@ -1,12 +1,12 @@
 
 ## Overview
 Docker Volume Plugin: Google Cloud Storage - Buckets
-### Google Cloud Storage
-Similar to Amazon S3, according to Google: `Cloud Storage is typically used to store unstructured data. You can add objects of any kind and size, and up to 5 TB.` -> https://console.cloud.google.com/storage
 
+### Google Cloud Storage
+Similar to Amazon S3, according to Google: `"Cloud Storage is typically used to store unstructured data. You can add objects of any kind and size, and up to 5 TB."` -> https://console.cloud.google.com/storage
 
 ## Installation
-### Dependency: Install Google Cloud Platform `gcsfuse`
+### Install Google Cloud Platform `gcsfuse`
 https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
 
 ### Install the Volume Driver
@@ -19,6 +19,8 @@ $ go install craimbert/docker-volume-gc-storage
 ````
 $ service docker stop
 ````
+### Generate on GCP a Service Account key in JSON format
+Section `To generate a private key in JSON or PKCS12 format`:<br/> https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
 ### Start the Volume Driver
 ````
 $ docker-volume-gcp-storage -gcp-key-json gcp-srv-account-key.json
@@ -28,10 +30,6 @@ $ docker-volume-gcp-storage -gcp-key-json gcp-srv-account-key.json
 $ service docker start
 ````
 ## Usage
-### Prerequisite: Generate on GCP a Service Account key in JSON format
-Section `To generate a private key in JSON or PKCS12 format`:<br/> https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
-
-### Create, List and Use a Volume
 ````
 $ docker volume create --driver gcstorage --name datastore
 datastore
