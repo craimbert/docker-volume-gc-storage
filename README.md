@@ -1,25 +1,9 @@
-# Installation
-## Prerequisite: tested environment
-```
-$ go version
-go version go1.6.2 linux/amd64
+# Google Cloud Storage
+###Generate on GCP a Service Account key as JSON file
+Section `generate a private key in JSON `: https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
 
-$ docker version
-Client:
- Version:      1.11.2
- API version:  1.23
- Go version:   go1.5.4
- Git commit:   b9f10c9
- Built:        Wed Jun  1 21:23:39 2016
- OS/Arch:      linux/amd64
-Server:
- Version:      1.11.2
- API version:  1.23
- Go version:   go1.5.4
- Git commit:   b9f10c9
- Built:        Wed Jun  1 21:23:39 2016
- OS/Arch:      linux/amd64
-````
+
+# Installation
 ##Install Google Cloud Platform `gcsfuse`
 https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
 ##Install the Volume Driver
@@ -60,8 +44,6 @@ https://console.cloud.google.com/storage
 * https://cloud.google.com/storage/docs/gcs-fuse
 * https://github.com/GoogleCloudPlatform/gcsfuse
 
-###Generate on GCP a Service Account key as JSON file
-https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
 
 ###Google GO API
 * https://godoc.org/google.golang.org/api/storage/v1
@@ -70,7 +52,27 @@ https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-
 ###Docker Volume Driver interface
 https://github.com/docker/go-plugins-helpers/blob/master/volume
 
+#Tested environment: Go & Docker versions
+```
+$ go version
+go version go1.6.2 linux/amd64
 
+$ docker version
+Client:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:39 2016
+ OS/Arch:      linux/amd64
+Server:
+ Version:      1.11.2
+ API version:  1.23
+ Go version:   go1.5.4
+ Git commit:   b9f10c9
+ Built:        Wed Jun  1 21:23:39 2016
+ OS/Arch:      linux/amd64
+````
 # Common Issues
 !! NTP !!
 
