@@ -16,6 +16,10 @@ func (d *gcpVolDriver) getVolumesFromHost() ([]string, error) {
 	// get all dirs from volume driver root dir
 	existingVols, err := ioutil.ReadDir(d.driverRootDir)
 	if err != nil {
+		if os.IsNotExist(err) {
+			log.Printf("The directory %s does not exist so there is no existing volume\n", d.driverRootDir)
+			return nil, nil
+		}
 		return nil, err
 	}
 	for _, v := range existingVols {
