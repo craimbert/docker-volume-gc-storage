@@ -25,8 +25,7 @@ https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
 ### Install the Volume Driver
 ````
 $ go get github.com/craimbert/docker-volume-gc-storage
-$ cd $GOPATH/src/github.com/craimbert/docker-volume-gc-storage && go get -d -v
-$ go install craimbert/docker-volume-gc-storage
+$ go install github.com/craimbert/docker-volume-gc-storage
 ````
 
 ### Stop Docker engine (Debian)
