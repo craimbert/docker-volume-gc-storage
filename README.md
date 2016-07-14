@@ -1,6 +1,18 @@
-docker-volume-gc-storage
+# Docker Volume Plugin: Google Cloud Storage
+Reserving up front a persistent disk of several 10s of GB might not seem like the best idea for some simple container use cases, let's look at an on-demand elastic bucket storage platform: Google Cloud Storage.
+
 ## Overview
-Docker Volume Plugin: Google Cloud Storage - Buckets
+The goal is to use a storage bucket as a docker volume:
+* a volume would be accessible to containers from completely different hosts, maybe not even running in the same cloud provider -> even local!
+* direct access to the volume from the Google Cloud Storage web platform
+
+## File System
+Any volume needs to expose a file system to handle the "disk" I/O, however a storage bucket does not expose any.
+<br/>
+Solution: Google Cloud Platform `gcsfuse`:<br/>
+`Cloud Storage FUSE is an open source Fuse adapter that allows you to mount Google Cloud Storage buckets as file systems on Linux or OS X systems`
+* https://cloud.google.com/storage/docs/gcs-fuse
+* https://github.com/GoogleCloudPlatform/gcsfuse
 
 ### Google Cloud Storage
 Similar to Amazon S3, according to Google: `"Cloud Storage is typically used to store unstructured data. You can add objects of any kind and size, and up to 5 TB."` -> https://console.cloud.google.com/storage
@@ -66,9 +78,6 @@ total 1
 -rw-r--r--    1 root     root             4 Jul  7 03:50 foo
 ````
 ## Useful Links
-### Google Cloud Storage - FUSE
-* https://cloud.google.com/storage/docs/gcs-fuse
-* https://github.com/GoogleCloudPlatform/gcsfuse
 
 ### Google GO API
 * https://godoc.org/google.golang.org/api/storage/v1
