@@ -18,7 +18,8 @@ Solution: Google Cloud Platform `gcsfuse`:<br/>
 Similar to Amazon S3, according to Google: `"Cloud Storage is typically used to store unstructured data. You can add objects of any kind and size, and up to 5 TB."` -> https://console.cloud.google.com/storage
 
 ## Installation
-### Install Google Cloud Platform `gcsfuse`
+
+### Install Google Cloud Platform gcsfuse
 https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
 
 ### Install the Volume Driver
@@ -27,20 +28,25 @@ $ go get github.com/craimbert/docker-volume-gc-storage
 $ cd $GOPATH/src/github.com/craimbert/docker-volume-gc-storage && go get -d -v
 $ go install craimbert/docker-volume-gc-storage
 ````
-### Stop Docker engine
+
+### Stop Docker engine (Debian)
 ````
 $ service docker stop
 ````
+
 ### Generate on GCP a Service Account key in JSON format
 Section `To generate a private key in JSON or PKCS12 format`:<br/> https://cloud.google.com/storage/docs/authentication?hl=en#generating-a-private-key
-### Start the Volume Driver
+
+### Start the Volume Driver (Debian)
 ````
 $ docker-volume-gc-storage -gcp-key-json gcp-srv-account-key.json
 ````
+
 ### Start Docker engine
 ````
 $ service docker start
 ````
+
 ## Usage
 - Create a volume
 ````
