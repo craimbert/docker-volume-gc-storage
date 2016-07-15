@@ -6,7 +6,7 @@ The goal is to use a storage bucket as a docker volume:
 * a volume would be accessible to containers from completely different hosts, maybe not even running in the same cloud provider -> even local!
 * direct access to the volume from the Google Cloud Storage web platform
 
-## Screencast
+## Screencast - Youtube video
 [![screencast_picture](screenshots/screencast_picture.png?raw=true)](https://www.youtube.com/watch?v=4Z4mQqQ92tc)
 
 ## File System
