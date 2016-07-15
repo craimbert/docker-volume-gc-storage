@@ -3,7 +3,7 @@ Reserving up front a persistent disk of several 10s of GB might not seem like th
 
 ## Overview
 The goal is to use a storage bucket as a docker volume:
-* a volume would be accessible to containers from completely different hosts, maybe not even running in the same cloud provider -> even local!
+* a volume would be accessible to containers running on different hosts (maybe not from same cloud provider, or even on local VM, or "native" containers on Mac)
 * direct access to the volume from the Google Cloud Storage web platform
 
 ## Screencast - Youtube video
@@ -16,9 +16,6 @@ Solution: Google Cloud Platform `gcsfuse`:<br/>
 `Cloud Storage FUSE is an open source Fuse adapter that allows you to mount Google Cloud Storage buckets as file systems on Linux or OS X systems`
 * https://cloud.google.com/storage/docs/gcs-fuse
 * https://github.com/GoogleCloudPlatform/gcsfuse
-
-### Google Cloud Storage
-Similar to Amazon S3, according to Google: `"Cloud Storage is typically used to store unstructured data. You can add objects of any kind and size, and up to 5 TB."` -> https://console.cloud.google.com/storage
 
 ## Installation
 
@@ -116,7 +113,7 @@ Server:
  OS/Arch:      linux/amd64
 ````
 ## Common Issues
-!! NTP !!
+- NTP needs to be running on the host in order to use Google APIs
 
 ## TODO
 On Docker for Mac: Docker engine doesn't seem to register the Volume Driver (even after engine restart):
