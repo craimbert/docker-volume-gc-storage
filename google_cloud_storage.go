@@ -9,6 +9,7 @@ import (
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"google.golang.org/api/iterator"
 	gstorage "google.golang.org/api/storage/v1"
 	//cloud "cloud.google.com/go"
 	gcloudstorage "cloud.google.com/go/storage"
@@ -77,11 +78,15 @@ func newGoogleCloudStorageClient(keyfilePath string) (*gcloudstorage.Client, err
 func (d *gcpVolDriver) emptyGCSBucket(client *gcloudstorage.Client, bucketName string) error {
 	bucketHandler := client.Bucket(bucketName)
 	ctx := context.Background()
-	list, err := bucketHandler.List(ctx, &gcloudstorage.Query{})
-	if err != nil {
-		return err
-	}
-	for _, r := range list.Results {
+	list := bucketHandler.Objects(ctx, &gcloudstorage.Query{})
+	for {
+		r, err := list.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		log.Printf("Deleting object '%+s' from GCS Bucket '%s'\n", r.Name, bucketName)
 		if err := bucketHandler.Object(r.Name).Delete(ctx); err != nil {
 			return err
