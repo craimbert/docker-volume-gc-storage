@@ -10,8 +10,8 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	gstorage "google.golang.org/api/storage/v1"
-	"google.golang.org/cloud"
-	gcloudstorage "google.golang.org/cloud/storage"
+	cloud "cloud.google.com/go"
+	gcloudstorage "cloud.google.com/go/storage"
 )
 
 // getGCPProjectID returns the unique ID of the Google Cloud Platform project defined in the service key JSON
