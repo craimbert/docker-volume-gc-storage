@@ -47,7 +47,7 @@ func newGcpVolDriver(driverRootDir, gcpServiceKeyPath string) (*gcpVolDriver, er
 	return d, nil
 }
 
-func (d *gcpVolDriver) Create(r volume.CreateRequest) error {
+func (d *gcpVolDriver) Create(r *volume.CreateRequest) error {
 	log.Printf("Creation of volume '%s'...\n", r.Name)
 	// Create a host mountpoint
 	m, err := d.handleCreateMountpoint(r.Name)
@@ -76,7 +76,7 @@ func (d *gcpVolDriver) Create(r volume.CreateRequest) error {
 	return nil
 }
 
-func (d *gcpVolDriver) Remove(r volume.RemoveRequest) error {
+func (d *gcpVolDriver) Remove(r *volume.RemoveRequest) error {
 	log.Printf("Remove volume '%s'\n", r.Name)
 	// Delete host mountpoint if necessary
 	err := d.handleDeleteMountpoint(r.Name)
@@ -92,7 +92,7 @@ func (d *gcpVolDriver) Remove(r volume.RemoveRequest) error {
 	return nil
 }
 
-func (d *gcpVolDriver) Path(r volume.PathRequest) (*volume.PathResponse, error) {
+func (d *gcpVolDriver) Path(r *volume.PathRequest) (*volume.PathResponse, error) {
 	return &volume.PathResponse{
 		Mountpoint: d.getMountpoint(r.Name),
 	}, nil
@@ -106,7 +106,7 @@ func (d *gcpVolDriver) List() (*volume.ListResponse, error) {
 	return &volume.ListResponse{Volumes: volumes}, nil
 }
 
-func (d *gcpVolDriver) Get(r volume.GetRequest) (*volume.GetResponse, error) {
+func (d *gcpVolDriver) Get(r *volume.GetRequest) (*volume.GetResponse, error) {
 	mountedBucked, ok := d.mountedBuckets[r.Name]
 	if ok {
 		return &volume.GetResponse{
@@ -116,7 +116,7 @@ func (d *gcpVolDriver) Get(r volume.GetRequest) (*volume.GetResponse, error) {
 	return nil, errors.New("Failed to get mountted bucket")
 }
 
-func (d *gcpVolDriver) Mount(r volume.MountRequest) (*volume.MountResponse, error) {
+func (d *gcpVolDriver) Mount(r *volume.MountRequest) (*volume.MountResponse, error) {
 	log.Printf("Mount volume '%s'\n", r.Name)
 	// get mountpoint
 	m := d.getMountpoint(r.Name)
@@ -137,7 +137,7 @@ func (d *gcpVolDriver) Mount(r volume.MountRequest) (*volume.MountResponse, erro
 	}, nil
 }
 
-func (d *gcpVolDriver) Unmount(r volume.UnmountRequest) error {
+func (d *gcpVolDriver) Unmount(r *volume.UnmountRequest) error {
 	log.Printf("Unmount volume '%s'\n", r.Name)
 	// get mountpoint
 	m := d.getMountpoint(r.Name)
