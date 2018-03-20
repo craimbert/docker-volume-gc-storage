@@ -10,7 +10,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	gstorage "google.golang.org/api/storage/v1"
-	cloud "cloud.google.com/go"
+	//cloud "cloud.google.com/go"
 	gcloudstorage "cloud.google.com/go/storage"
 )
 
@@ -68,7 +68,7 @@ func newGoogleCloudStorageClient(keyfilePath string) (*gcloudstorage.Client, err
 	ctx := context.Background()
 	client, err := gcloudstorage.NewClient(
 		ctx,
-		cloud.WithTokenSource(conf.TokenSource(ctx)),
+		//cloud.WithTokenSource(conf.TokenSource(ctx)),
 	)
 	return client, err
 }
