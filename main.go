@@ -47,7 +47,8 @@ func main() {
 	// start HTTP server
 	if runtime.GOOS == "linux" {
 		log.Printf("Listening on unix socket /run/docker/plugins/%s.sock...\n", driverID)
-		log.Println(volHandler.ServeUnix("root", driverID))
+		// 0 means root's gid
+		log.Println(volHandler.ServeUnix(driverID, 0))
 	}
 	if runtime.GOOS == "darwin" { // MacOS
 		log.Fatal("unix socket creation is only supported on linux and freebsd")
