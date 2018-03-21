@@ -59,10 +59,10 @@ func (d *gcpVolDriver) Create(r volume.Request) volume.Response {
 		return volume.Response{Err: err.Error()}
 	}
 	// Refer volumeName <-> gcsVolumes
-	cleanCloud := true
+	cleanCloud := false
 	val, ok := r.Options["clean_cloud_bucket"]
-	if ok && val == "no" {
-		cleanCloud = false
+	if ok && val == "yes" {
+		cleanCloud = true
 	}
 	d.mountedBuckets[r.Name] = &gcsVolumes{
 		volume: &volume.Volume{
