@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"errors"
 
 	"github.com/docker/go-plugins-helpers/volume"
 	gstorage "google.golang.org/api/storage/v1"
@@ -46,17 +47,17 @@ func newGcpVolDriver(driverRootDir, gcpServiceKeyPath string) (*gcpVolDriver, er
 	return d, nil
 }
 
-func (d *gcpVolDriver) Create(r volume.Request) volume.Response {
+func (d *gcpVolDriver) Create(r *volume.CreateRequest) error {
 	log.Printf("Creation of volume '%s'...\n", r.Name)
 	// Create a host mountpoint
 	m, err := d.handleCreateMountpoint(r.Name)
 	if err != nil {
-		return volume.Response{Err: err.Error()}
+		return err
 	}
 	// Create a bucket on GCP Storage
 	bucketName, err := d.handleCreateGCStorageBucket(r.Name)
 	if err != nil {
-		return volume.Response{Err: err.Error()}
+		return err
 	}
 	// Refer volumeName <-> gcsVolumes
 	cleanCloud := true
@@ -72,89 +73,89 @@ func (d *gcpVolDriver) Create(r volume.Request) volume.Response {
 		gcsBucketName: bucketName,
 		cleanCloud:    cleanCloud,
 	}
-	return volume.Response{}
+	return nil
 }
 
-func (d *gcpVolDriver) Remove(r volume.Request) volume.Response {
+func (d *gcpVolDriver) Remove(r *volume.RemoveRequest) error {
 	log.Printf("Remove volume '%s'\n", r.Name)
 	// Delete host mountpoint if necessary
 	err := d.handleDeleteMountpoint(r.Name)
 	if err != nil {
-		return volume.Response{Err: err.Error()}
+		return err
 	}
 	// Empty & Delete Google Cloud Storage bucket if necessary
 	if err := d.handleRemoveGCStorageBucket(r.Name); err != nil {
-		return volume.Response{Err: err.Error()}
+		return err
 	}
 	// Remove the volume from the internal map
 	delete(d.mountedBuckets, r.Name)
-	return volume.Response{}
+	return nil
 }
 
-func (d *gcpVolDriver) Path(r volume.Request) volume.Response {
-	return volume.Response{
+func (d *gcpVolDriver) Path(r *volume.PathRequest) (*volume.PathResponse, error) {
+	return &volume.PathResponse{
 		Mountpoint: d.getMountpoint(r.Name),
-	}
+	}, nil
 }
 
-func (d *gcpVolDriver) List(r volume.Request) volume.Response {
+func (d *gcpVolDriver) List() (*volume.ListResponse, error) {
 	var volumes []*volume.Volume
 	for _, v := range d.mountedBuckets {
 		volumes = append(volumes, v.volume)
 	}
-	return volume.Response{Volumes: volumes}
+	return &volume.ListResponse{Volumes: volumes}, nil
 }
 
-func (d *gcpVolDriver) Get(r volume.Request) volume.Response {
+func (d *gcpVolDriver) Get(r *volume.GetRequest) (*volume.GetResponse, error) {
 	mountedBucked, ok := d.mountedBuckets[r.Name]
 	if ok {
-		return volume.Response{
+		return &volume.GetResponse{
 			Volume: mountedBucked.volume,
-		}
+		}, nil
 	}
-	return volume.Response{}
+	return nil, errors.New("Failed to get mountted bucket")
 }
 
-func (d *gcpVolDriver) Mount(r volume.Request) volume.Response {
+func (d *gcpVolDriver) Mount(r *volume.MountRequest) (*volume.MountResponse, error) {
 	log.Printf("Mount volume '%s'\n", r.Name)
 	// get mountpoint
 	m := d.getMountpoint(r.Name)
 	// mountpoint exists?
 	exist, err := d.isPathExist(m)
 	if err != nil {
-		return volume.Response{Err: err.Error()}
+		return nil, err
 	}
 	if !exist {
-		return volume.Response{Err: fmt.Sprintf("Host mountpoint %s does not exist", m)}
+		return nil, errors.New(fmt.Sprintf("Host mountpoint %s does not exist", m))
 	}
 	// mount a GC Storage bucket using gcsfuse on the host mountpoint
 	if err := d.mountGcsfuse(r.Name); err != nil {
-		return volume.Response{Err: err.Error()}
+		return nil, err
 	}
-	return volume.Response{
+	return &volume.MountResponse{
 		Mountpoint: d.getMountpoint(r.Name),
-	}
+	}, nil
 }
 
-func (d *gcpVolDriver) Unmount(r volume.Request) volume.Response {
+func (d *gcpVolDriver) Unmount(r *volume.UnmountRequest) error {
 	log.Printf("Unmount volume '%s'\n", r.Name)
 	// get mountpoint
 	m := d.getMountpoint(r.Name)
 	// mountpoint exists?
 	exist, err := d.isPathExist(m)
 	if err != nil {
-		return volume.Response{Err: err.Error()}
+		return err
 	}
 	if !exist {
-		return volume.Response{Err: fmt.Sprintf("Host mountpoint %s does not exist", m)}
+		return errors.New(fmt.Sprintf("Host mountpoint %s does not exist", m))
 	}
 	// unmount the GC Storage bucket
 	if err := d.unmountGcsfuse(r.Name); err != nil {
-		return volume.Response{Err: err.Error()}
+		return err
 	}
-	return volume.Response{}
+	return nil
 }
 
-func (d *gcpVolDriver) Capabilities(r volume.Request) volume.Response {
-	return volume.Response{Capabilities: volume.Capability{Scope: "global"}}
+func (d *gcpVolDriver) Capabilities() *volume.CapabilitiesResponse {
+	return &volume.CapabilitiesResponse{Capabilities: volume.Capability{Scope: "global"}}
 }

@@ -9,9 +9,10 @@ import (
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"google.golang.org/api/iterator"
 	gstorage "google.golang.org/api/storage/v1"
-	"google.golang.org/cloud"
-	gcloudstorage "google.golang.org/cloud/storage"
+	"google.golang.org/api/option"
+	gcloudstorage "cloud.google.com/go/storage"
 )
 
 // getGCPProjectID returns the unique ID of the Google Cloud Platform project defined in the service key JSON
@@ -68,7 +69,7 @@ func newGoogleCloudStorageClient(keyfilePath string) (*gcloudstorage.Client, err
 	ctx := context.Background()
 	client, err := gcloudstorage.NewClient(
 		ctx,
-		cloud.WithTokenSource(conf.TokenSource(ctx)),
+		option.WithTokenSource(conf.TokenSource(ctx)),
 	)
 	return client, err
 }
@@ -77,11 +78,15 @@ func newGoogleCloudStorageClient(keyfilePath string) (*gcloudstorage.Client, err
 func (d *gcpVolDriver) emptyGCSBucket(client *gcloudstorage.Client, bucketName string) error {
 	bucketHandler := client.Bucket(bucketName)
 	ctx := context.Background()
-	list, err := bucketHandler.List(ctx, &gcloudstorage.Query{})
-	if err != nil {
-		return err
-	}
-	for _, r := range list.Results {
+	list := bucketHandler.Objects(ctx, &gcloudstorage.Query{})
+	for {
+		r, err := list.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		log.Printf("Deleting object '%+s' from GCS Bucket '%s'\n", r.Name, bucketName)
 		if err := bucketHandler.Object(r.Name).Delete(ctx); err != nil {
 			return err

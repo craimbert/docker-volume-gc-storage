@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/user"
 	"path/filepath"
 	"runtime"
+	"strconv"
 
 	"github.com/docker/go-plugins-helpers/volume"
 )
@@ -47,7 +49,9 @@ func main() {
 	// start HTTP server
 	if runtime.GOOS == "linux" {
 		log.Printf("Listening on unix socket /run/docker/plugins/%s.sock...\n", driverID)
-		log.Println(volHandler.ServeUnix("root", driverID))
+		u, _ := user.Lookup("root")
+		gid, _ := strconv.Atoi(u.Gid)
+		log.Println(volHandler.ServeUnix(driverID, gid))
 	}
 	if runtime.GOOS == "darwin" { // MacOS
 		log.Fatal("unix socket creation is only supported on linux and freebsd")
