@@ -17,6 +17,9 @@ const (
 )
 
 var serviceKeyPath = flag.String("gcp-key-json", "", "Google Cloud Platform Service Account Key as JSON")
+var baseDirFlag = flag.String("basedir",
+	filepath.Join(volume.DefaultDockerRootDirectory, driverID),
+	"Mounted volume base directory")
 
 func main() {
 	// define CLI & get args
@@ -31,7 +34,7 @@ func main() {
 	}
 
 	// define volume driver
-	defaultPath := filepath.Join(volume.DefaultDockerRootDirectory, driverID)
+	defaultPath := *baseDirFlag
 	gcpServiceKeyAbsPath, err := filepath.Abs(*serviceKeyPath)
 	if err != nil {
 		log.Fatal(err)
